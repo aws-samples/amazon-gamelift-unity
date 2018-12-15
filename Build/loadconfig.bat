@@ -1,0 +1,57 @@
+:: Copyright 2018 Amazon
+::
+:: Licensed under the Apache License, Version 2.0 (the "License");
+:: you may not use this file except in compliance with the License.
+:: You may obtain a copy of the License at
+::
+::     http://www.apache.org/licenses/LICENSE-2.0
+::
+:: Unless required by applicable law or agreed to in writing, software
+:: distributed under the License is distributed on an "AS IS" BASIS,
+:: WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+:: See the License for the specific language governing permissions and
+:: limitations under the License.
+
+@ECHO OFF
+
+REM THIS BATCH FILE IS CALLED FROM BUILD.BAT WITH A NAMED CONFIGURATION NAME AS A PARAMETER. THE BATCH FILE BUILDS THE UNITY
+REM PROJECT INTO THE IMAGE OF THE SAME NAME. THIS MEANS WE CAN HAVE A UNITY DEBUG SERVER BUILD, A UNITY RELEASE CLIENT BUILD AND
+REM SO ON, WHICH OTHERWISE REQUIRES TO BE MANUALLY SET UP IN THE UNITY EDITOR.
+
+REM PLUGINS MUST ALREADY BE BUILT BY NOW
+
+SETLOCAL ENABLEDELAYEDEXPANSION
+
+REM ------- FIND MY ABSOLUTE ROOT -------
+SET REL_ROOT=..\
+SET ABS_ROOT=
+PUSHD %REL_ROOT%
+SET ABS_ROOT=%CD%
+POPD
+
+REM ------- LOAD BASED ON COMMAND LINE PARAMETER -------
+REM IS A CONFIGURATION SPECIFIED ON THE COMMAND LINE?
+IF "%1" == "" GOTO ASKCONFIGNAME
+SET CONFIGNAME=%1
+GOTO VERIFYEXISTS
+
+REM ------- LOAD BASED ON USER INPUT -------
+:ASKCONFIGNAME
+SET /P CONFIGNAME=WHICH CONFIGURATION DO YOU WANT TO DELETE? : 
+IF "%CONFIGNAME%" EQU "" GOTO ASKCONFIGNAME
+
+
+REM ------- VERIFY THE REQUESTED CONFIG EXISTS -------
+:VERIFYEXISTS
+IF NOT EXIST %ABS_ROOT%\Configurations\%CONFIGNAME% GOTO SAVENEW
+
+
+REM ------- DELETE THE EXISTING DEFAULT CONFIGURATION -------
+IF EXIST %ABS_ROOT%\ProjectSettings RMDIR /S /Q %ABS_ROOT%\ProjectSettings
+
+REM ------- COPY THE NAMED CONFIGURATION INTO ITS PLACE -------
+MD %ABS_ROOT%\ProjectSettings
+COPY %ABS_ROOT%\Configurations\%CONFIGNAME%\ProjectSettings\*.* %ABS_ROOT%\ProjectSettings\ > NUL
+IF EXIST %ABS_ROOT%\Library RMDIR /S /Q %ABS_ROOT%\Library
+
+EXIT /B 0

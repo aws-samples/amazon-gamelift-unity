@@ -1,0 +1,10 @@
+- Support for Windows and Linux operating systems.
+- Support for Microsoft Visual Studio 2012 or later
+- Support for Mono develop 6.1 or later
+- Support for Xamarin Studio 6.1 or later
+- Support for .Net framework 3.5
+- Support for .Net framework 4.5
+- Dependency on Google.Protobuf 3.1.0 (Net4.5 only)
+- Dependency on log4net 2.0.5
+- Dependency on SocketIoClientDotNet 0.9.13
+- Dependency on protobuf-net 2.0.0.668 (Net3.5 only)

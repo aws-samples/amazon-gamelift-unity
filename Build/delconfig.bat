@@ -1,0 +1,75 @@
+:: Copyright 2018 Amazon
+::
+:: Licensed under the Apache License, Version 2.0 (the "License");
+:: you may not use this file except in compliance with the License.
+:: You may obtain a copy of the License at
+::
+::     http://www.apache.org/licenses/LICENSE-2.0
+::
+:: Unless required by applicable law or agreed to in writing, software
+:: distributed under the License is distributed on an "AS IS" BASIS,
+:: WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+:: See the License for the specific language governing permissions and
+:: limitations under the License.
+
+@ECHO OFF
+
+REM THIS BATCH FILE IS DESIGNED TO BE RUN INTERACTIVELY AND DELETES A NAMED UNITY CONFIGURATION. SEE SAVECONFIG.BAT FOR MORE INFO
+
+SETLOCAL ENABLEDELAYEDEXPANSION
+
+REM ------- FIND MY ABSOLUTE ROOT -------
+SET REL_ROOT=..\
+SET ABS_ROOT=
+PUSHD %REL_ROOT%
+SET ABS_ROOT=%CD%
+POPD
+
+
+REM ------- USE COMMAND LINE PARAMETER FOR NAME OF CONFIG TO DELETE IF THERE IS ONE -------
+IF NOT "%1" == "" (
+	SET CONFIGNAME=%1
+	GOTO DELETEQUESTION
+)
+
+
+REM ------- DO WE WANT TO DELETE THE DEFAULT CONFIGURATION (%ABS_ROOT%\ProjectSettings) -------
+:ASKDELDEFAULT
+set /P c=DO YOU WANT TO DELETE THE DEFAULT CONFIGURATION [Y/N]? 
+if /I "%c%" EQU "Y" GOTO DELETEDEFAULT
+if /I "%c%" EQU "N" EXIT /B 1
+GOTO :ASKDELDEFAULT
+
+
+REM ------- NO PARAM AND NOT DEFAULT, ASK USER WHICH CONFIG TO DELETE -------
+:TRYAGAIN
+SET /P CONFIGNAME=WHICH CONFIGURATION DO YOU WANT TO DELETE? : 
+IF "%CONFIGNAME%" EQU "" GOTO TRYAGAIN
+GOTO DELETEQUESTION
+
+
+REM ------- VERIFY THE NAMED CONFIGURATION TO DELETE -------
+:DELETEQUESTION
+IF NOT EXIST %ABS_ROOT%\Configurations\%CONFIGNAME% GOTO NOTAVAIL
+set /P c=DO YOU WANT TO DELETE CONFIGURATION %CONFIGNAME% [Y/N]? 
+if /I "%c%" EQU "Y" GOTO DELETEEXISTING
+if /I "%c%" EQU "N" EXIT /B 1
+GOTO :DELETEQUESTION
+
+
+REM ------- APPROVED; DELETE CONFIGURATION -------
+:DELETEEXISTING
+IF EXIST %ABS_ROOT%\Configurations\%CONFIGNAME% RMDIR /S /Q %ABS_ROOT%\Configurations\%CONFIGNAME%
+EXIT /B 0
+
+
+REM ------- IT WASN'T THERE; ERROR -------
+:NOTAVAIL
+ECHO CONFIGURATION '%CONFIGNAME%' DOES NOT EXIST. NO ACTION WAS TAKEN.
+EXIT /B 3
+
+
+REM ------- DELETE DEFAULT CONFIGURATION -------
+:DELETEDEFAULT
+IF EXIST %ABS_ROOT%\ProjectSettings RMDIR /S /Q %ABS_ROOT%\ProjectSettings
+EXIT /B 0

@@ -1,0 +1,5 @@
+- New API StartMatchBackfill
+- New API StopMatchBackfill
+- New callback UpdateGameSession
+- Updated Google Protobuf to v3.3
+- Various bug fixes

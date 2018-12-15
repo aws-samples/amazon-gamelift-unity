@@ -1,0 +1,1 @@
+- SDK vending GameSessionData and MatchmakerData on GameSessions.

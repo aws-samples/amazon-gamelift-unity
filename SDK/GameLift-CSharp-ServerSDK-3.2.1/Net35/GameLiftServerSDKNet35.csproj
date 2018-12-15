@@ -1,0 +1,184 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{52250704-F3C7-4563-9A65-66764EBE0601}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>GameLiftServerSDKNet35</RootNamespace>
+    <AssemblyName>GameLiftServerSDKNet35</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="protobuf-net">
+      <HintPath Condition="Exists('..\packages\protobuf-net.2.0.0.668\lib\net35\protobuf-net.dll')">..\packages\protobuf-net.2.0.0.668\lib\net35\protobuf-net.dll</HintPath>
+      <HintPath Condition="Exists('..\Internal\GameLiftServerSDKNet35WithTests\packages\protobuf-net.2.0.0.668\lib\net35\protobuf-net.dll')">..\Internal\GameLiftServerSDKNet35WithTests\packages\protobuf-net.2.0.0.668\lib\net35\protobuf-net.dll</HintPath>
+    </Reference>
+    <Reference Include="SocketIoClientDotNet">
+      <HintPath Condition="Exists('..\packages\SocketIoClientDotNet.0.9.13\lib\net35\SocketIoClientDotNet.dll')">..\packages\SocketIoClientDotNet.0.9.13\lib\net35\SocketIoClientDotNet.dll</HintPath>
+      <HintPath Condition="Exists('..\Internal\GameLiftServerSDKNet35WithTests\packages\SocketIoClientDotNet.0.9.13\lib\net35\SocketIoClientDotNet.dll')">..\Internal\GameLiftServerSDKNet35WithTests\packages\SocketIoClientDotNet.0.9.13\lib\net35\SocketIoClientDotNet.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.NET35">
+      <HintPath Condition="Exists('..\packages\System.Threading.Tasks.Unofficial.3.1\lib\net35\System.Threading.Tasks.NET35.dll')">..\packages\System.Threading.Tasks.Unofficial.3.1\lib\net35\System.Threading.Tasks.NET35.dll</HintPath>
+      <HintPath Condition="Exists('..\Internal\GameLiftServerSDKNet35WithTests\packages\System.Threading.Tasks.Unofficial.3.1\lib\net35\System.Threading.Tasks.NET35.dll')">..\Internal\GameLiftServerSDKNet35WithTests\packages\System.Threading.Tasks.Unofficial.3.1\lib\net35\System.Threading.Tasks.NET35.dll</HintPath>
+    </Reference>
+    <Reference Include="WebSocket4Net">
+      <HintPath Condition="Exists('..\packages\WebSocket4Net.0.14.1\lib\net35\WebSocket4Net.dll')">..\packages\WebSocket4Net.0.14.1\lib\net35\WebSocket4Net.dll</HintPath>
+      <HintPath Condition="Exists('..\Internal\GameLiftServerSDKNet35WithTests\packages\WebSocket4Net.0.14.1\lib\net35\WebSocket4Net.dll')">..\Internal\GameLiftServerSDKNet35WithTests\packages\WebSocket4Net.0.14.1\lib\net35\WebSocket4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath Condition="Exists('..\packages\Newtonsoft.Json.8.0.1\lib\net35\Newtonsoft.Json.dll')">..\packages\Newtonsoft.Json.8.0.1\lib\net35\Newtonsoft.Json.dll</HintPath>
+      <HintPath Condition="Exists('..\Internal\GameLiftServerSDKNet35WithTests\packages\Newtonsoft.Json.8.0.1\lib\net35\Newtonsoft.Json.dll')">..\Internal\GameLiftServerSDKNet35WithTests\packages\Newtonsoft.Json.8.0.1\lib\net35\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath Condition="Exists('..\packages\log4net.2.0.5\lib\net35-full\log4net.dll')">..\packages\log4net.2.0.5\lib\net35-full\log4net.dll</HintPath>
+      <HintPath Condition="Exists('..\Internal\GameLiftServerSDKNet35WithTests\packages\log4net.2.0.5\lib\net35-full\log4net.dll')">..\Internal\GameLiftServerSDKNet35WithTests\packages\log4net.2.0.5\lib\net35-full\log4net.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Source\Common\StartMatchBackfillOutcome.cs">
+      <Link>Source\Common\StartMatchBackfillOutcome.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\Model\AttributeValue.cs">
+      <Link>Source\Server\Model\AttributeValue.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\Model\MatchmakerData.cs">
+      <Link>Source\Server\Model\MatchmakerData.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\Model\Player.cs">
+      <Link>Source\Server\Model\Player.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\Model\StartMatchBackfillRequest.cs">
+      <Link>Source\Server\Model\StartMatchBackfillRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\Model\StartMatchBackfillResult.cs">
+      <Link>Source\Server\Model\StartMatchBackfillResult.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\Model\StopMatchBackfillRequest.cs">
+      <Link>Source\Server\Model\StopMatchBackfillRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\Model\UpdateGameSession.cs">
+      <Link>Source\Server\Model\UpdateGameSession.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\Model\UpdateReason.cs">
+      <Link>Source\Server\Model\UpdateReason.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server_35\GameSessionParser_35.cs">
+      <Link>Source\Server\GameSessionParser_35.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server_35\Model\BackfillDataMapper_35.cs">
+      <Link>Source\Server\Model\BackfillDataMapper_35.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server_35\Model\DescribePlayerSessionsRequestMapper_35.cs">
+      <Link>Source\Server\Model\DescribePlayerSessionsRequestMapper_35.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server_35\Model\GameSession_35.cs">
+      <Link>Source\Server\Model\GameSession_35.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="..\Source\Common\AwsStringOutcome.cs">
+      <Link>Source\Common\AwsStringOutcome.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Common\AwsLongOutcome.cs">
+      <Link>Source\Common\AwsLongOutcome.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Common\GameLiftErrors.cs">
+      <Link>Source\Common\GameLiftErrors.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Common\GenericOutcome.cs">
+      <Link>Source\Common\GenericOutcome.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Common\DescribePlayerSessionsOutcome.cs">
+      <Link>Source\Common\DescribePlayerSessionsOutcome.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Protobuf\SDK.cs">
+      <Link>Source\Protobuf\SDK.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\AuxProxyMessageSender.cs">
+      <Link>Source\Server\AuxProxyMessageSender.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server_35\AuxProxyMessageSender_35.cs">
+      <Link>Source\Server\AuxProxyMessageSender_35.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\GameLiftServerAPI.cs">
+      <Link>Source\Server\GameLiftServerAPI.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\GameSessionParser.cs">
+      <Link>Source\Server\GameSessionParser.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\IAuxProxyMessageHandler.cs">
+      <Link>Source\Server\IAuxProxyMessageHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\LogParameters.cs">
+      <Link>Source\Server\LogParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\Network.cs">
+      <Link>Source\Server\Network.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\ProcessParameters.cs">
+      <Link>Source\Server\ProcessParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\Model\GameProperty.cs">
+      <Link>Source\Server\Model\GameProperty.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\Model\GameSession.cs">
+      <Link>Source\Server\Model\GameSession.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\Model\GameSessionStatus.cs">
+      <Link>Source\Server\Model\GameSessionStatus.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\Model\PlayerSessionCreationPolicy.cs">
+      <Link>Source\Server\Model\PlayerSessionCreationPolicy.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\Model\PlayerSession.cs">
+      <Link>Source\Server\Model\PlayerSession.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\Model\PlayerSessionStatus.cs">
+      <Link>Source\Server\Model\PlayerSessionStatus.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\Model\DescribePlayerSessionsRequest.cs">
+      <Link>Source\Server\Model\DescribePlayerSessionsRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\Model\DescribePlayerSessionsResult.cs">
+      <Link>Source\Server\Model\DescribePlayerSessionsResult.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server_35\Model\DescribePlayerSessionsResult_35.cs">
+      <Link>Source\Server\Model\DescribePlayerSessionsResult_35.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server_35\ServerState.cs">
+      <Link>Source\Server\ServerState.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Dependencies\EngineIoClientDotNet-master\Src\EngineIoClientDotNet.net35\EngineIoClientDotNet.net35.csproj">
+      <Project>{568d67d0-3253-4601-9b04-7730a9ec5cc0}</Project>
+      <Name>EngineIoClientDotNet.net35</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+</Project>

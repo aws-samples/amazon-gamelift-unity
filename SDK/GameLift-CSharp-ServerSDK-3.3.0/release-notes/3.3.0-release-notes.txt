@@ -1,0 +1,7 @@
+- Fixed disconnection issues.
+- Updated Newtonsoft to version 9.0.1
+- Updated SocketIoClientDotNet to version 1.0.7.1
+- Updated EngineIoClientDotNet to version 1.0.7
+- Updated WebSocket4Net to version 0.15.2
+- Updated System.Collections.Immutable to version 1.5.0
+- Various bug fixes

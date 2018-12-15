@@ -1,0 +1,186 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B6A23723-FA7F-46DF-8837-1FE06E1AABD9}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>GameLiftServerSDKNet45</RootNamespace>
+    <AssemblyName>GameLiftServerSDKNet45</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath Condition="Exists('..\packages\Newtonsoft.Json.8.0.1\lib\net45\Newtonsoft.Json.dll')">..\packages\Newtonsoft.Json.8.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath Condition="Exists('..\Internal\GameLiftServerSDKNet45WithTests\packages\Newtonsoft.Json.8.0.1\lib\net45\Newtonsoft.Json.dll')">..\Internal\GameLiftServerSDKNet45WithTests\packages\Newtonsoft.Json.8.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath Condition="Exists('..\Internal\TestApplicationServer\packages\Newtonsoft.Json.8.0.1\lib\net45\Newtonsoft.Json.dll')">..\Internal\TestApplicationServer\packages\Newtonsoft.Json.8.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="WebSocket4Net">
+      <HintPath Condition="Exists('..\packages\WebSocket4Net.0.14.1\lib\net45\WebSocket4Net.dll')">..\packages\WebSocket4Net.0.14.1\lib\net45\WebSocket4Net.dll</HintPath>
+      <HintPath Condition="Exists('..\Internal\GameLiftServerSDKNet45WithTests\packages\WebSocket4Net.0.14.1\lib\net45\WebSocket4Net.dll')">..\Internal\GameLiftServerSDKNet45WithTests\packages\WebSocket4Net.0.14.1\lib\net45\WebSocket4Net.dll</HintPath>
+      <HintPath Condition="Exists('..\Internal\TestApplicationServer\packages\WebSocket4Net.0.14.1\lib\net45\WebSocket4Net.dll')">..\Internal\TestApplicationServer\packages\WebSocket4Net.0.14.1\lib\net45\WebSocket4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="EngineIoClientDotNet">
+      <HintPath Condition="Exists('..\packages\EngineIoClientDotNet.0.9.22\lib\net45\EngineIoClientDotNet.dll')">..\packages\EngineIoClientDotNet.0.9.22\lib\net45\EngineIoClientDotNet.dll</HintPath>
+      <HintPath Condition="Exists('..\Internal\GameLiftServerSDKNet45WithTests\packages\EngineIoClientDotNet.0.9.22\lib\net45\EngineIoClientDotNet.dll')">..\Internal\GameLiftServerSDKNet45WithTests\packages\EngineIoClientDotNet.0.9.22\lib\net45\EngineIoClientDotNet.dll</HintPath>
+      <HintPath Condition="Exists('..\Internal\TestApplicationServer\packages\EngineIoClientDotNet.0.9.22\lib\net45\EngineIoClientDotNet.dll')">..\Internal\TestApplicationServer\packages\EngineIoClientDotNet.0.9.22\lib\net45\EngineIoClientDotNet.dll</HintPath>
+    </Reference>
+    <Reference Include="SocketIoClientDotNet">
+      <HintPath Condition="Exists('..\packages\SocketIoClientDotNet.0.9.13\lib\net45\SocketIoClientDotNet.dll')">..\packages\SocketIoClientDotNet.0.9.13\lib\net45\SocketIoClientDotNet.dll</HintPath>
+      <HintPath Condition="Exists('..\Internal\GameLiftServerSDKNet45WithTests\packages\SocketIoClientDotNet.0.9.13\lib\net45\SocketIoClientDotNet.dll')">..\Internal\GameLiftServerSDKNet45WithTests\packages\SocketIoClientDotNet.0.9.13\lib\net45\SocketIoClientDotNet.dll</HintPath>
+      <HintPath Condition="Exists('..\Internal\TestApplicationServer\packages\SocketIoClientDotNet.0.9.13\lib\net45\SocketIoClientDotNet.dll')">..\Internal\TestApplicationServer\packages\SocketIoClientDotNet.0.9.13\lib\net45\SocketIoClientDotNet.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath Condition="Exists('..\packages\log4net.2.0.5\lib\net45-full\log4net.dll')">..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
+      <HintPath Condition="Exists('..\Internal\GameLiftServerSDKNet45WithTests\packages\log4net.2.0.5\lib\net45-full\log4net.dll')">..\Internal\GameLiftServerSDKNet45WithTests\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
+      <HintPath Condition="Exists('..\Internal\TestApplicationServer\packages\log4net.2.0.5\lib\net45-full\log4net.dll')">..\Internal\TestApplicationServer\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Protobuf">
+      <HintPath Condition="Exists('..\packages\Google.Protobuf.3.1.0\lib\net45\Google.Protobuf.dll')">..\packages\Google.Protobuf.3.1.0\lib\net45\Google.Protobuf.dll</HintPath>
+      <HintPath Condition="Exists('..\Internal\GameLiftServerSDKNet45WithTests\packages\Google.Protobuf.3.1.0\lib\net45\Google.Protobuf.dll')">..\Internal\GameLiftServerSDKNet45WithTests\packages\Google.Protobuf.3.1.0\lib\net45\Google.Protobuf.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Source\Common\StartMatchBackfillOutcome.cs">
+      <Link>Source\Common\StartMatchBackfillOutcome.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\Model\AttributeValue.cs">
+      <Link>Source\Server\Model\AttributeValue.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\Model\MatchmakerData.cs">
+      <Link>Source\Server\Model\MatchmakerData.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\Model\Player.cs">
+      <Link>Source\Server\Model\Player.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\Model\StartMatchBackfillRequest.cs">
+      <Link>Source\Server\Model\StartMatchBackfillRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\Model\StartMatchBackfillResult.cs">
+      <Link>Source\Server\Model\StartMatchBackfillResult.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\Model\StopMatchBackfillRequest.cs">
+      <Link>Source\Server\Model\StopMatchBackfillRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\Model\UpdateGameSession.cs">
+      <Link>Source\Server\Model\UpdateGameSession.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\Model\UpdateReason.cs">
+      <Link>Source\Server\Model\UpdateReason.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server_45\GameSessionParser_45.cs">
+      <Link>Source\Server\GameSessionParser_45.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server_45\Model\BackfillDataMapper_45.cs">
+      <Link>Source\Server\Model\BackfillDataMapper_45.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server_45\Model\DescribePlayerSessionsRequestMapper_45.cs">
+      <Link>Source\Server\Model\DescribePlayerSessionsRequestMapper_45.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server_45\Model\GameSession_45.cs">
+      <Link>Source\Server\Model\GameSession_45.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="..\Source\Common\AwsStringOutcome.cs">
+      <Link>Source\Common\AwsStringOutcome.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Common\AwsLongOutcome.cs">
+      <Link>Source\Common\AwsLongOutcome.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Common\GameLiftErrors.cs">
+      <Link>Source\Common\GameLiftErrors.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Common\GenericOutcome.cs">
+      <Link>Source\Common\GenericOutcome.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Common\DescribePlayerSessionsOutcome.cs">
+      <Link>Source\Common\DescribePlayerSessionsOutcome.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Google\Sdk.cs">
+      <Link>Source\Google\Sdk.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\AuxProxyMessageSender.cs">
+      <Link>Source\Server\AuxProxyMessageSender.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server_45\AuxProxyMessageSender_45.cs">
+      <Link>Source\Server\AuxProxyMessageSender_45.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\GameLiftServerAPI.cs">
+      <Link>Source\Server\GameLiftServerAPI.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\GameSessionParser.cs">
+      <Link>Source\Server\GameSessionParser.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\IAuxProxyMessageHandler.cs">
+      <Link>Source\Server\IAuxProxyMessageHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\LogParameters.cs">
+      <Link>Source\Server\LogParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\Network.cs">
+      <Link>Source\Server\Network.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\ProcessParameters.cs">
+      <Link>Source\Server\ProcessParameters.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\ServerState.cs">
+      <Link>Source\Server\ServerState.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\Model\GameProperty.cs">
+      <Link>Source\Server\Model\GameProperty.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\Model\GameSession.cs">
+      <Link>Source\Server\Model\GameSession.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\Model\GameSessionStatus.cs">
+      <Link>Source\Server\Model\GameSessionStatus.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\Model\PlayerSessionCreationPolicy.cs">
+      <Link>Source\Server\Model\PlayerSessionCreationPolicy.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\Model\PlayerSession.cs">
+      <Link>Source\Server\Model\PlayerSession.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\Model\PlayerSessionStatus.cs">
+      <Link>Source\Server\Model\PlayerSessionStatus.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\Model\DescribePlayerSessionsRequest.cs">
+      <Link>Source\Server\Model\DescribePlayerSessionsRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server\Model\DescribePlayerSessionsResult.cs">
+      <Link>Source\Server\Model\DescribePlayerSessionsResult.cs</Link>
+    </Compile>
+    <Compile Include="..\Source\Server_45\Model\DescribePlayerSessionsResult_45.cs">
+      <Link>Source\Server\Model\DescribePlayerSessionsResult_45.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Source\Protobuf\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+</Project>
