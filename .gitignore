@@ -1,8 +1,8 @@
-[Ll]ibrary/
-[Oo]utput/
-[Ee]nvironment/
-[Pp]roject[Ss]ettings
-[Pp]ackages/
+/[Ll]ibrary/
+/[Oo]utput/
+/[Ee]nvironment/
+/[Pp]roject[Ss]ettings/
+/[Pp]ackages/
 
 SDK/*/Net35/bin/
 SDK/*/Net35/obj/
