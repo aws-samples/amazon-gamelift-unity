@@ -62,28 +62,61 @@ FOR /L %%A IN (1,1,100) DO IF "!CONFIGNAME:~-1!"==" " SET CONFIGNAME=!CONFIGNAME
 :BUILD
 ECHO BUILDING %CONFIGNAME%
 
-REM TASKKILL KILLS THE UNITY.EXE PROCESS IF IT IS RUNNING. IF UNITY IS NOT RUNNING THEN IT WILL THROW AN ERROR MSG TO STDERR.
-REM BUT WE DON'T CARE ABOUT THAT SO CAPTURE THE STDERR OUTPUT AND IGNORE IT.
-TASKKILL /IM unity.exe 2> NUL
 
-REM WHICH UNITY ARE WE USING (32- OR 64-BIT)?
-IF EXIST "%ProgramFiles(x86)%\Unity\Editor\Unity.exe" SET UNITYEXE="%ProgramFiles(x86)%\Unity\Editor\Unity.exe"
-IF EXIST "%ProgramFiles%\Unity\Editor\Unity.exe" SET UNITYEXE="%ProgramFiles%\Unity\Editor\Unity.exe"
+:KILLUNITY
+REM TASKKILL KILLS THE UNITY.EXE PROCESS IF IT IS RUNNING.
+TASKLIST | FIND /I "UNITY.EXE" >NUL && (
+    TASKKILL /IM "UNITY.EXE" /F
+    GOTO KILLUNITY
+)
+
+
+REM REMOVE OLD OUTPUT FOLDER
+IF EXIST "%ABS_ROOT%\Output\%CONFIGNAME%" RMDIR /S /Q "%ABS_ROOT%\Output\%CONFIGNAME%"
+
+
+REM WHICH UNITY EXECUTABLE WILL WE USE?
+FOR /f "delims=" %%F IN ('DIR "%ProgramFiles%\Unity\Hub\Editor\" /b /on') DO SET UNITYVERSION=%%F
+IF EXIST "%ProgramFiles%\Unity\Hub\Editor\%UNITYVERSION%\Editor\Unity.exe" (
+    SET UNITYEXE="%ProgramFiles%\Unity\Hub\Editor\%UNITYVERSION%\Editor\Unity.exe"
+) ELSE (
+    IF EXIST "%ProgramFiles%\Unity\Hub\Editor" GOTO ERRORINVALUNITY
+    IF EXIST "%ProgramFiles(x86)%\Unity\Editor\Unity.exe" SET UNITYEXE="%ProgramFiles(x86)%\Unity\Editor\Unity.exe"
+    IF EXIST "%ProgramFiles%\Unity\Editor\Unity.exe" SET UNITYEXE="%ProgramFiles%\Unity\Editor\Unity.exe"
+)
 IF "" EQU "%UNITYEXE%" GOTO ERRORNOUNITY
+ECHO USING %UNITYEXE% TO BUILD
+
 
 REM DO A BUILD OF THE STANDALONE USING THE UNITY COMMAND LINE.
-%UNITYEXE% -nographics -batchmode -projectPath "%ABS_ROOT%" -buildWindows64Player "%ABS_ROOT%\Output\%CONFIGNAME%\Image\GameLiftUnity.exe" -quit
+%UNITYEXE% -batchmode -buildTarget Win64 -projectPath "%ABS_ROOT%" -buildWindows64Player "%ABS_ROOT%\Output\%CONFIGNAME%\Image\GameLiftUnity.exe" -quit
+
+
+REM DID THE BUILD COMPLETE SUCCESSFULLY?
+IF NOT EXIST "%ABS_ROOT%\Output\%CONFIGNAME%\Image\GameLiftUnity.exe" GOTO BUILDFAILED
 
 REM COPY THE PLUGIN TO THE BUILD DIRECTORY
 COPY %ABS_ROOT%\Output\Intermediate\GameLiftClientSDKPlugin\Release\GameLiftClientSDKPlugin.dll %ABS_ROOT%\Output\%CONFIGNAME%\Image\GameLiftUnity_Data\Plugins > NUL
 COPY %ABS_ROOT%\Plugin\Sdk\GameLiftServer\GameLift-CSharpSDK-3.1.3\Net35\bin\Release\*.dll %ABS_ROOT%\Output\%CONFIGNAME%\Image\GameLiftUnity_Data\Plugins > NUL
 
+
 REM FINISHED
-ECHO BUILD COMPLETE. SEE %LOCALAPPDATA%\Unity\Editor\Editor.log
+ECHO BUILD COMPLETED SUCCESSFULLY. SEE %LOCALAPPDATA%\Unity\Editor\Editor.log
+EXIT /B 0
+
+:BUILDFAILED
+ECHO BUILD FAILED: LOG AT %LOCALAPPDATA%\Unity\Editor\Editor.log
+ECHO SEE %ABS_ROOT%\Build\buildconfig.bat
 EXIT /B 0
 
 :ERRORNOUNITY
 ECHO "%ProgramFiles(x86)%\Unity\Editor\Unity.exe" OR "%ProgramFiles%\Unity\Editor\Unity.exe" NOT FOUND
 ECHO BUILD FAILED: UNITY IS NOT INSTALLED
-ECHO See %ABS_ROOT%\Build\buildconfig.bat
+ECHO SEE %ABS_ROOT%\Build\buildconfig.bat
+EXIT /B 0
+
+:ERRORINVALUNITY
+ECHO "%ProgramFiles(x86)%\Unity\Hub\Editor\" WAS FOUND BUT A VALID VERSION WAS NOT
+ECHO BUILD FAILED: UNITY IS NOT VALID VERSION
+ECHO SEE %ABS_ROOT%\Build\buildconfig.bat
 EXIT /B 0

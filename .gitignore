@@ -2,7 +2,9 @@
 /[Oo]utput/
 /[Ee]nvironment/
 /[Pp]roject[Ss]ettings/
-/[Pp]ackages/
+/[Ll]ogs/
+/[Tt]emp/
+/[Oo]bj/
 
 SDK/*/Net35/bin/
 SDK/*/Net35/obj/
@@ -44,6 +46,7 @@ sysinfo.txt
 
 DeployTool/bin/
 DeployTool/obj/
+DeployTool/packages/
 Backend/bin/
 Backend/obj/
 SDK/GameLift-CSharp-ServerSDK-3.3.0/Net35/Dependencies/EngineIoClientDotNet-master/Src/EngineIoClientDotNet.net35/bin/Release/net35/EngineIoClientDotNet.dll
