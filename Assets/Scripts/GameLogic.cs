@@ -43,6 +43,8 @@ public class GameLogic : MonoBehaviour
         Debug.Log(":) GAMELOGIC AWAKE");
         // prevent the game going to sleep when the window loses focus
         Application.runInBackground = true;
+        // Just 60 frames per second is enough
+        Application.targetFrameRate = 60;
 
         // Get pointers to scripts on other objects
         GameObject gameliftObj = GameObject.Find("/GameLiftStatic");
