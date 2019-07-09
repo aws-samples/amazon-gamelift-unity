@@ -74,11 +74,21 @@ rebuilds only the most recently built configuration
 
 # How to deploy a server to GameLift #
 
-First you will need to have the permissions for the local user to deploy the server to GameLift and create the fleet and alias for it. If you have sufficient permissions, you may jump to step 5.
+First you will need to have the permissions for the local user to deploy the server to GameLift and create the fleet and alias for it. If you have sufficient permissions in an ```aws configure``` profile, you may jump to step 5.
 
 1. If you do not already have it, install the AWS Commmand Line Interface (CLI) tools, available at: <https://aws.amazon.com/cli/>
 
-1. Create an IAM user in your AWS account for the local machine. Give the local user at least the following permissions, with IAM Access Key and Secret Key for programmatic access. Download the credentials file.
+1. Create an IAM user in your AWS account for the local machine. Start off going to the following link: <https://console.aws.amazon.com/iam/home?region=us-east-1#/users$new?step=details>
+
+1. Give your user a name, and set up the user to have programmatic access:
+
+    ![Create an IAM User Step 1](Docs/res/iam1.png "Create an IAM User Step 1")
+
+1. Create a policy for attaching to your user. This gives the user the permissions needed for deploying the demo server to GameLift as a fleet.
+
+    ![Create an IAM User Step 2](Docs/res/iam2.png "Create an IAM User Step 2")
+
+1. The policy used should contain at least the following permissions.
 
     ```json
     {
@@ -99,7 +109,15 @@ First you will need to have the permissions for the local user to deploy the ser
     }
     ```
 
-1. Open a command windows and use the `aws configure` command to create a credentials profile on your machine for deploying, and paste in the access key and secret key. Skip the last little piece about the named deploy profile if you want, see here <https://docs.aws.amazon.com/cli/latest/userguide/cli-multiple-profiles.html>
+    ![Create an IAM User Step 3](Docs/res/iam3.png "Create an IAM User Step 3")
+
+1. Finish creating the user with the policy attached. Download the credentials file, which is in .CSV format, and store it somewhere safe.
+
+    ![Create an IAM User Step 4](Docs/res/iam4.png "Create an IAM User Step 4")
+
+1. Open it in a spreadsheet application, or text editor, and use the credentials to generate a CLI credentials profile as follows
+
+1. Open a command windows and use the `aws configure` command to create a credentials profile on your machine for deploying, and paste in the access key and secret key from the credentials file. You may skip the last little piece about the named deploy profile if you want, or see here <https://docs.aws.amazon.com/cli/latest/userguide/cli-multiple-profiles.html> for the details of this neat feature.
 
     ```bat
         aws configure --profile=deploy
@@ -280,8 +298,6 @@ Local mode uses a server running on the local machine, and then the client will 
 1. You should be able to press numeric keypad keys in one client or another to make matches and increase your score. All clients should see the matches being made, and everyone’s scores. If you have a laptop, some function key combination may be required to activate numeric keypad keys.
 
     In rare cases, no numeric keypad maybe available. Keys Y U I, H J K, N M comma may be used instead.
-
-1. Press ESC in any client to stop. The game ends and the scores are shown for each player, as the game returns to attract mode. Press RETURN again (in each client) for the next game.
 
 ### How to use in GAMELIFT mode ###
 

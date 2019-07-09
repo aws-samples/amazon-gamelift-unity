@@ -319,8 +319,7 @@ namespace DeployTool
             {
                 PutBucketRequest putRequest1 = new PutBucketRequest
                 {
-                    BucketName = bucket,
-                    BucketRegion = Amazon.S3.S3Region.FindValue(region.SystemName)
+                    BucketName = bucket
                 };
 
                 PutBucketResponse response1 = await client.PutBucketAsync(putRequest1);
