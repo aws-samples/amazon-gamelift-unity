@@ -76,7 +76,7 @@ IF EXIST "%ABS_ROOT%\Output\%CONFIGNAME%" RMDIR /S /Q "%ABS_ROOT%\Output\%CONFIG
 
 
 REM WHICH UNITY EXECUTABLE WILL WE USE?
-FOR /f "delims=" %%F IN ('DIR "%ProgramFiles%\Unity\Hub\Editor\" /b /on') DO SET UNITYVERSION=%%F
+FOR /f "delims=" %%F IN ('DIR "%ProgramFiles%\Unity\Hub\Editor\2017*" /b /on') DO SET UNITYVERSION=%%F
 IF EXIST "%ProgramFiles%\Unity\Hub\Editor\%UNITYVERSION%\Editor\Unity.exe" (
     SET UNITYEXE="%ProgramFiles%\Unity\Hub\Editor\%UNITYVERSION%\Editor\Unity.exe"
 ) ELSE (
