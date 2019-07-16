@@ -54,7 +54,7 @@ Download a copy of the sample or clone it to your local machine. I like to use G
 
 1. Install Unity by running the downloaded installer.
 
-1. You will also need Visual Studio 2013 or 2017. There should be no other environment required.
+1. You will also need Visual Studio 2013 or 2017, along with Visual Studio tools for .NET Desktop Environment. There should be no other environment required.
 
 1. Open a command window and change directory to the build directory:
 
