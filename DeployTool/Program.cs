@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -32,6 +33,8 @@ namespace DeployTool
             string version = null;
             string rootpath = null;
             bool alias = false; // default
+            string aliasUpdate = null;
+            bool aliasop = false;
 
             try
             {
@@ -85,13 +88,41 @@ namespace DeployTool
 
                     if (String.Equals(args[i], @"--alias", StringComparison.OrdinalIgnoreCase))
                     {
+                        if (aliasop) throw new ArgumentException("Error: only one alias operation allowed, either --alias, --no-alias, or --update-alias");
+                        aliasop = true;
                         alias = true;
                         continue;
                     }
 
                     if (String.Equals(args[i], @"--noalias", StringComparison.OrdinalIgnoreCase))
                     {
+                        if (aliasop) throw new ArgumentException("Error: only one alias operation allowed, either --alias, --no-alias, or --update-alias");
+                        aliasop = true;
                         alias = false;
+                        continue;
+                    }
+
+                    if (String.Equals(args[i], @"--no-alias", StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (aliasop) throw new ArgumentException("Error: only one alias operation allowed, either --alias, --no-alias, or --update-alias");
+                        aliasop = true;
+                        alias = false;
+                        continue;
+                    }
+
+                    if (String.Equals(args[i], @"--update-alias", StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (aliasop) throw new ArgumentException("Error: only one alias operation allowed, either --alias, --no-alias, or --update-alias");
+                        aliasop = true;
+                        if (++i > args.Length) throw new ArgumentException("Error: --update-alias should be followed by an <aliasid>");
+                        if (Regex.Match(args[i], @"^alias-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$", RegexOptions.IgnoreCase).Success)
+                        {
+                            aliasUpdate = args[i].ToLowerInvariant();
+                        }
+                        else
+                        {
+                            throw new ArgumentException("Error: --update-alias should be followed by a valid alias id, e.g. alias-3edb1432-14c8-4650-b350-aaf7090fd5a2");
+                        }
                         continue;
                     }
 
@@ -106,7 +137,7 @@ namespace DeployTool
                 if (version == null) throw new ArgumentException("Error: --version <version> is mandatory");
                 if (rootpath == null) throw new ArgumentException("Error: --root-path <rootpath> is mandatory");
 
-                await DeployBuild(name, version, rootpath, alias);
+                await DeployBuild(name, version, rootpath, alias, aliasUpdate);
             }
             catch (ArgumentException e)
             {
@@ -120,13 +151,16 @@ namespace DeployTool
                 Console.WriteLine();
                 Console.WriteLine(@"Grammar:");
                 Console.WriteLine(@"DeployTool <help>|<options>");
-                Console.WriteLine(@"<options>  ::= <name>|<ver>|<root>|<region>|<alias> [<options>]");
+                Console.WriteLine(@"<options>  ::= <name>|<ver>|<root>|<region>|<aliasopt> [<options>]");
                 Console.WriteLine(@"<help>     ::= --help                show this message");
                 Console.WriteLine(@"<name>     ::= --name <string>       fleet name *");
                 Console.WriteLine(@"<ver>      ::= --version <string>    fleet version *");
                 Console.WriteLine(@"<root>     ::= --root-path <path>    image root *");
                 Console.WriteLine(@"<region>   ::= --region <sys-name>   deploy to region (default us-east-1)");
-                Console.WriteLine(@"<alias>    ::= --alias|--noalias     also create an alias to fleet (or not)");
+                Console.WriteLine(@"<aliasopt> ::= <alias>|<update>");
+                Console.WriteLine(@"<alias>    ::= --alias|--no-alias    also create an alias to fleet (or not)");
+                Console.WriteLine(@"<update>   ::= --update-alias <aliasid>");
+                Console.WriteLine(@"<aliasid>  ::= alias-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}");
                 Console.WriteLine(@"<sys-name> ::= us-east-1|us-east-2|us-west-1|us-west-2|ap-south-1|");
                 Console.WriteLine(@"               ap-northeast-2|ap-southeast-1|ap-southeast-2|ap-northeast-1|");
                 Console.WriteLine(@"               ca-central-1|cn-north-1|eu-central-1|eu-west-1|eu-west-2|");
@@ -134,11 +168,12 @@ namespace DeployTool
                 Console.WriteLine();
                 Console.WriteLine(@"* name, ver and root options are mandatory for fleet creation");
                 Console.WriteLine(@"  option order is not important; no spaces in arguments");
+                Console.WriteLine(@"  case insensitive except for rootpath value on linux fleets");
                 Console.WriteLine();
             }
         }
 
-        static private async Task DeployBuild(string name, string version, string rootpath, bool alias)
+        static private async Task DeployBuild(string name, string version, string rootpath, bool alias, string aliasUpdate)
         {
             // Create the Role for GameLift to use S3 (if it doesn't already exist)
             string roleName = "GameLiftS3Access"; // the role for GameLift to use S3
@@ -162,6 +197,11 @@ namespace DeployTool
             if (alias)
             {
                 string aliasId = await CreateAlias(name, fleetId);
+                Console.WriteLine(aliasId);
+            }
+            else if (aliasUpdate != null)
+            {
+                string aliasId = await UpdateAlias(aliasUpdate, fleetId);
                 Console.WriteLine(aliasId);
             }
             else
@@ -439,8 +479,7 @@ namespace DeployTool
             config.RegionEndpoint = region;
             using (AmazonGameLiftClient aglc = new AmazonGameLiftClient(config))
             {
-
-                // create fleet
+                // create a new alias
                 var careq = new Amazon.GameLift.Model.CreateAliasRequest();
                 careq.Name = name;
                 careq.Description = "Alias to direct traffic to " + fleetId;
@@ -451,6 +490,27 @@ namespace DeployTool
                     Message = ""
                 };
                 Amazon.GameLift.Model.CreateAliasResponse cares = await aglc.CreateAliasAsync(careq);
+
+                return cares.Alias.AliasId;
+            }
+        }
+
+        private static async Task<string> UpdateAlias(string aliasUpdate, string fleetId)
+        {
+            var config = new AmazonGameLiftConfig();
+            config.RegionEndpoint = region;
+            using (AmazonGameLiftClient aglc = new AmazonGameLiftClient(config))
+            {
+                // create a new alias
+                var uareq = new Amazon.GameLift.Model.UpdateAliasRequest();
+                uareq.AliasId = aliasUpdate;
+                uareq.RoutingStrategy = new RoutingStrategy
+                {
+                    Type = RoutingStrategyType.SIMPLE,
+                    FleetId = fleetId,
+                    Message = ""
+                };
+                Amazon.GameLift.Model.UpdateAliasResponse cares = await aglc.UpdateAliasAsync(uareq);
 
                 return cares.Alias.AliasId;
             }
