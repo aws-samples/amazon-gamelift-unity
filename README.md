@@ -76,7 +76,7 @@ rebuilds only the most recently built configuration
 
 First you will need to have the permissions for the local user to deploy the server to GameLift and create the fleet and alias for it. If you have sufficient permissions in an ```aws configure``` profile, you may jump to step 5.
 
-1. If you do not already have it, install the AWS Commmand Line Interface (CLI) tools, available at: <https://aws.amazon.com/cli/>
+1. If you do not already have it, install the AWS Command Line Interface (CLI) tools, available at: <https://aws.amazon.com/cli/>
 
 1. Create an IAM user in your AWS account for the local machine. Start off going to the following link: <https://console.aws.amazon.com/iam/home?region=us-east-1#/users$new?step=details>
 
@@ -240,7 +240,7 @@ If you want to use the principle of least privilege, as you should, then create 
 
 ## Alternative method of installing credentials file with Powershell ##
 
-Powershell and the AWS Tools for Visual Studio can also be used to manipulate the profiles in the SDK store, although frankly the above is siimpler. See instructions here: <http://docs.aws.amazon.com/powershell/latest/userguide/specifying-your-aws-credentials.html> and here: <http://docs.aws.amazon.com/toolkit-for-visual-studio/latest/user-guide/getting-set-up.html#creds>
+Powershell and the AWS Tools for Visual Studio can also be used to manipulate the profiles in the SDK store, although frankly the above is simpler. See instructions here: <http://docs.aws.amazon.com/powershell/latest/userguide/specifying-your-aws-credentials.html> and here: <http://docs.aws.amazon.com/toolkit-for-visual-studio/latest/user-guide/getting-set-up.html#creds>
 
 Store the credentials manually with the profile name demo-gamelift-unity using Powershell as follows:
 
@@ -252,7 +252,7 @@ To check that the credentials are installed, use the command:
 
 The client log also outputs information about what credentials are loaded.
 
-# Understandng and using the Client #
+# Understanding and using the Client #
 
 The client also generates the usual Unity log file. The client operates in three modes depending on what you are doing for a server.
 
@@ -301,7 +301,7 @@ Local mode uses a server running on the local machine, and then the client will 
 
 ### How to use in GAMELIFT mode ###
 
-1. To use the GameLift server in GameLift mode, simply run the clients with `C:\dev\GameLiftUnity\Build\rc.bat` without a local server running, and the game will try to connect. Clients can be on different machines and play together. NOTE, the corporate network (or VPN connection to the corporate network) can disrupt the client’s ability to reach the GameLift fleet, due to blocked ports. Port permissions must be set on the fleet to allow access on port 1935. (NB Outbound traffic on this port might be blocked by the Amazon corporate network in some places now, other ports can be specified to the server with -port 1935 or other values if needed; See the sectioni for setting up your own GameLift server below.)
+1. To use the GameLift server in GameLift mode, simply run the clients with `C:\dev\GameLiftUnity\Build\rc.bat` without a local server running, and the game will try to connect. Clients can be on different machines and play together. NOTE, the corporate network (or VPN connection to the corporate network) can disrupt the client’s ability to reach the GameLift fleet, due to blocked ports. Port permissions must be set on the fleet to allow access on port 1935. (NB Outbound traffic on this port might be blocked by the Amazon corporate network in some places now, other ports can be specified to the server with -port 1935 or other values if needed; See the section for setting up your own GameLift server below.)
 
 To specify an alias to connect to, run the client with the alias as a parameter. The syntax is:
 
