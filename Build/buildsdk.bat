@@ -94,6 +94,8 @@ IF EXIST "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community\Common7\Too
 GOTO VSMISSING
 
 :VS2013
+ECHO Running VCVARS32
+REM PROBLEMS HERE? If you get 'The input line is too long.' and 'The syntax of the command is incorrect.' messages, then vcvars32.bat has been run too many times. Close the Command Window, open a new one and it will work.
 CALL "%ProgramFiles(x86)%\Microsoft Visual Studio 12.0\VC\bin\vcvars32.bat"
 GOTO EXTRACTBUILD
 
