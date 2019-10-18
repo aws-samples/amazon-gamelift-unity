@@ -82,7 +82,7 @@ namespace DeployTool
                                 valid = true;
                             }
                         }
-                        if (!valid) throw new ArgumentException("Error: --region should be followed by a valid region system name, e.g. us-east-1");
+                        if (!valid) throw new ArgumentException("Error: --region should be followed by a valid <region> system name, e.g. us-east-1");
                         continue;
                     }
 
@@ -175,15 +175,18 @@ namespace DeployTool
 
         static private async Task DeployBuild(string name, string version, string rootpath, bool alias, string aliasUpdate)
         {
-            // Create the Role for GameLift to use S3 (if it doesn't already exist)
-            string roleName = "GameLiftS3Access"; // the role for GameLift to use S3
-            string roleArn = await GetRoleArn(roleName);
-            string policy = @"{""Version"": ""2012-10-17"",""Statement"": [{""Action"": [""s3:GetObject"",""s3:GetObjectVersion"",""s3:GetObjectMetadata""],""Resource"": ""arn:aws:s3:::"
-                + bucket + @"/*"",""Effect"": ""Allow""}]}";
-            if (roleArn == null) roleArn = await CreateRole(roleName, "gamelift", policy);
-
+            // Get AWS account number to make our bucket name unique
+            var awsAccountId = GetAWSNum();
+            
             // Bucket
-            bucket = "buildbucket-" + region.SystemName + "-" + GetAWSNum(roleArn);
+            bucket = "buildbucket-" + region.SystemName + "-" + awsAccountId;
+
+            // Create the Role for GameLift to use S3 (if it doesn't already exist)
+            string roleName = "GameLiftS3Access-"+region.SystemName; // the role for GameLift to use S3
+            string roleArn = await GetRoleArn(roleName);
+            string policy = @"{""Version"": ""2012-10-17"",""Statement"": [{""Action"": [""s3:GetObject"",""s3:GetObjectVersion""],""Resource"": ""arn:aws:s3:::"
+                + bucket + @"/*"",""Effect"": ""Allow""}]}";
+            if (roleArn == null) roleArn = await CreateGameLiftRole(roleName, policy);
 
             // Zip and upload the build to a unique bucket
             DeleteZip();
@@ -210,9 +213,30 @@ namespace DeployTool
             }
         }
 
-        private static string GetAWSNum(string roleArn)
+        private static string GetAWSNum()
         {
-            return roleArn.Split(':')[4];
+            try
+            {
+                var config = new AmazonIdentityManagementServiceConfig();
+                config.RegionEndpoint = region;
+                using (var aimsc = new AmazonIdentityManagementServiceClient(config))
+                {
+                    var response = aimsc.GetUser();
+
+                    string arn = response.User.Arn;
+                    return arn.Split(':')[4];
+
+                }
+            }
+            catch (NoSuchEntityException) // role was not present
+            {
+                return null;
+            }
+            catch (AmazonIdentityManagementServiceException imsException)
+            {
+                Console.WriteLine(imsException.Message, imsException.InnerException);
+                throw;
+            }
         }
 
         static string ZipBuild(string rootpath)
@@ -256,7 +280,7 @@ namespace DeployTool
             }
         }
 
-        static async Task<string> CreateRole(string roleName, string service, string policy)
+        static async Task<string> CreateGameLiftRole(string roleName, string policy)
         {
             try
             {
@@ -264,7 +288,7 @@ namespace DeployTool
                 config.RegionEndpoint = region;
                 using (var aimsc = new AmazonIdentityManagementServiceClient(config))
                 {
-                    string assumeRole = @"{""Version"":""2012-10-17"",""Statement"":[{""Effect"":""Allow"",""Principal"":{""Service"": """ + service + @".amazonaws.com""},""Action"":""sts:AssumeRole""}]}";
+                    string assumeRole = @"{""Version"":""2012-10-17"",""Statement"":[{""Effect"":""Allow"",""Principal"":{""Service"": ""gamelift.amazonaws.com""},""Action"":""sts:AssumeRole""}]}";
 
                     var crres = await aimsc.CreateRoleAsync(new CreateRoleRequest
                     {
@@ -275,12 +299,10 @@ namespace DeployTool
 
                     Role role = crres.Role;
 
-                    bucket = "buildbucket-" + region.SystemName + "-" + GetAWSNum(role.Arn);
-
                     var cpres = await aimsc.CreatePolicyAsync(new CreatePolicyRequest
                     {
                         PolicyName = roleName + "Policy",
-                        Description = "This allows " + service + " to access services",
+                        Description = "This allows GameLift to access services",
                         PolicyDocument = policy,
                         Path = "/"
                     });

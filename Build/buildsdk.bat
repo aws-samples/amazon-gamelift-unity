@@ -59,7 +59,7 @@ REM ------- UPDATE NUGET -------
 CALL NUGET.EXE update -Self
 
 REM ------- INSTALL AWS .NET SDK FILES IF NEEDED -------
-IF NOT EXIST "AWSSDK.GameLift.3.3.9.2\lib\net35\AWSSDK.GameLift.dll" CALL "nuget.exe" install AWSSDK.Gamelift -Version 3.3.9.2
+IF NOT EXIST "AWSSDK.GameLift.3.3.103.14\lib\net35\AWSSDK.GameLift.dll" CALL "nuget.exe" install AWSSDK.Gamelift -Version 3.3.103.14
 
 REM ------- GENERATE INSTALL.BAT FILE IF NEEDED -------
 IF NOT EXIST install.bat ECHO vcredist_x64.exe /q > install.bat
@@ -69,8 +69,8 @@ CD %~dp0
 REM ------- COPY AWS SDK .NET35 DLLS FROM AWS .NET SDK -------
 :SDKREADY
 IF NOT EXIST %ABS_ROOT%\Assets\Plugins\NUL mkdir %ABS_ROOT%\Assets\Plugins
-IF NOT EXIST "%ABS_ROOT%\Assets\Plugins\AWSSDK.Core.dll" COPY "%ABS_ROOT%\Environment\AWSSDK.Core.3.3.18.2\lib\net35\AWSSDK.Core.dll" "%ABS_ROOT%\Assets\Plugins\AWSSDK.Core.dll"
-IF NOT EXIST "%ABS_ROOT%\Assets\Plugins\AWSSDK.GameLift.dll" COPY "%ABS_ROOT%\Environment\AWSSDK.GameLift.3.3.9.2\lib\net35\AWSSDK.GameLift.dll" "%ABS_ROOT%\Assets\Plugins\AWSSDK.GameLift.dll"
+IF NOT EXIST "%ABS_ROOT%\Assets\Plugins\AWSSDK.Core.dll" COPY "%ABS_ROOT%\Environment\AWSSDK.Core.3.3.103.46\lib\net35\AWSSDK.Core.dll" "%ABS_ROOT%\Assets\Plugins\AWSSDK.Core.dll"
+IF NOT EXIST "%ABS_ROOT%\Assets\Plugins\AWSSDK.GameLift.dll" COPY "%ABS_ROOT%\Environment\AWSSDK.GameLift.3.3.103.14\lib\net35\AWSSDK.GameLift.dll" "%ABS_ROOT%\Assets\Plugins\AWSSDK.GameLift.dll"
 
 REM ------- BUILD C# GAMELIFT SERVER SDK PROJECT -------
 IF NOT EXIST "%ABS_ROOT%\Assets\Plugins\EngineIoClientDotNet.dll" GOTO BUILDSERVERSDK
@@ -89,8 +89,11 @@ REM --- END ---
 REM SET VISUAL STUDIO ENVIRONMENT
 IF EXIST "%ProgramFiles(x86)%\Microsoft Visual Studio 12.0\VC\bin\vcvars32.bat" GOTO VS2013
 IF EXIST "%ProgramFiles(x86)%\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars32.bat" GOTO VS2017C
-IF EXIST "%ProgramFiles(x86)%\Microsoft Visual Studio\2017\Professional\VC\Auxiliary\Build\vcvars32.bat" GOTO VS2017
+IF EXIST "%ProgramFiles(x86)%\Microsoft Visual Studio\2017\Professional\VC\Auxiliary\Build\vcvars32.bat" GOTO VS2017P
+IF EXIST "%ProgramFiles(x86)%\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvars32.bat" GOTO VS2017E
 IF EXIST "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community\Common7\Tools\VsDevCmd.bat" GOTO VS2019C
+IF EXIST "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Professional\Common7\Tools\VsDevCmd.bat" GOTO VS2019P
+IF EXIST "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Enterprise\Common7\Tools\VsDevCmd.bat" GOTO VS2019E
 GOTO VSMISSING
 
 :VS2013
@@ -103,13 +106,27 @@ GOTO EXTRACTBUILD
 CALL "%ProgramFiles(x86)%\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars32.bat"
 GOTO EXTRACTBUILD
 
-:VS2017
+:VS2017P
 CALL "%ProgramFiles(x86)%\Microsoft Visual Studio\2017\Professional\VC\Auxiliary\Build\vcvars32.bat"
+GOTO EXTRACTBUILD
+
+:VS2017E
+CALL "%ProgramFiles(x86)%\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvars32.bat"
 GOTO EXTRACTBUILD
 
 :VS2019C
 SET VSCMD_DEBUG=0
 CALL "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community\Common7\Tools\VsDevCmd.bat"
+GOTO EXTRACTBUILD
+
+:VS2019P
+SET VSCMD_DEBUG=0
+CALL "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Professional\Common7\Tools\VsDevCmd.bat"
+GOTO EXTRACTBUILD
+
+:VS2019E
+SET VSCMD_DEBUG=0
+CALL "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Enterprise\Common7\Tools\VsDevCmd.bat"
 GOTO EXTRACTBUILD
 
 :EXTRACTBUILD
@@ -128,7 +145,7 @@ REM --- END ---
 
 :VSMISSING
 ECHO ERROR: VISUAL STUDIO MISSING. SEE BUILDSDK.BAT
-ECHO INSTALL VISUAL STUDIO 2013 OR 2017
+ECHO INSTALL VISUAL STUDIO 2013 OR 2017 OR 2019
 EXIT /B 1
 REM --- ABEND ---
 

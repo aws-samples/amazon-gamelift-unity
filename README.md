@@ -42,6 +42,12 @@ Also don't forget to look into Flexmatch and Game Session Placement Queues. All 
 
 That aside, let's get started.
 
+# Obtaining assistance #
+
+The best way to obtain assistance is to open an issue on the Github page for this project.
+
+Code contributions are encouraged. To contribute code, you should make a pull request with your proposed changes. Code contributions will be subject to review.
+
 # Getting the Codebase #
 
 Almost everyone will be downloading and building the sample from GitHub. If you have been supplied with a credentials file, then see the section at the end entitled Demo Version. Setup for you will be a bit different.
@@ -50,7 +56,18 @@ Download a copy of the sample or clone it to your local machine. I like to use G
 
 # Building the project #
 
-1. Download the Unity 2017.4.6 LTS installer available here: <https://download.unity3d.com/download_unity/c24f30193bac/UnityDownloadAssistant-2017.4.6f1.exe>
+1. Several versions of Unity have been tested to work throughout development of the project, but I only test against the most recent due to process and time constraints, and when Unity is updated something frequently breaks. The following versions have been tested at one point or another:
+
+    Unity 2017.4.6 LTS installer available here:
+    <https://download.unity3d.com/download_unity/c24f30193bac/UnityDownloadAssistant-2017.4.6f1.exe>
+
+    Unity 2019.1.8f1 Windows installer available here:
+    <https://unity3d.com/get-unity/download?thank-you=update&download_nid=62662&os=Win>
+
+    Unity 2019.2.5f1 Windows installer available here:
+    <https://unity3d.com/get-unity/download?thank-you=update&download_nid=62983&os=Win>
+
+    If you are using another version of Unity, that's fine too, but the project may need minor modifications. It should be safe to use the most recent version of Unity. I will try to keep the project working on the most recent version of Unity but as Unity changes frequently this effort might not always succeed. In the event of difficulty using the latest released Unity version, please open an issue on the Github page.
 
 1. Install Unity by running the downloaded installer.
 
@@ -72,11 +89,13 @@ or
 `buildconfig`
 rebuilds only the most recently built configuration
 
+Note that a built project can be cleaned, removing all known output files and intermediate files, with `clean.bat`. If you have built the project before and are getting build failures, it may be worth trying this to prepare for a complete rebuild.
+
 # How to deploy a server to GameLift #
 
 First you will need to have the permissions for the local user to deploy the server to GameLift and create the fleet and alias for it. If you have sufficient permissions in an ```aws configure``` profile, you may jump to step 5.
 
-1. If you do not already have it, install the AWS Command Line Interface (CLI) tools, available at: <https://aws.amazon.com/cli/>
+1. If you do not already have it, install the AWS Commmand Line Interface (CLI) tools, available at: <https://aws.amazon.com/cli/>
 
 1. Create an IAM user in your AWS account for the local machine. Start off going to the following link: <https://console.aws.amazon.com/iam/home?region=us-east-1#/users$new?step=details>
 
@@ -240,7 +259,7 @@ If you want to use the principle of least privilege, as you should, then create 
 
 ## Alternative method of installing credentials file with Powershell ##
 
-Powershell and the AWS Tools for Visual Studio can also be used to manipulate the profiles in the SDK store, although frankly the above is simpler. See instructions here: <http://docs.aws.amazon.com/powershell/latest/userguide/specifying-your-aws-credentials.html> and here: <http://docs.aws.amazon.com/toolkit-for-visual-studio/latest/user-guide/getting-set-up.html#creds>
+Powershell and the AWS Tools for Visual Studio can also be used to manipulate the profiles in the SDK store, although frankly the above is siimpler. See instructions here: <http://docs.aws.amazon.com/powershell/latest/userguide/specifying-your-aws-credentials.html> and here: <http://docs.aws.amazon.com/toolkit-for-visual-studio/latest/user-guide/getting-set-up.html#creds>
 
 Store the credentials manually with the profile name demo-gamelift-unity using Powershell as follows:
 
@@ -252,7 +271,7 @@ To check that the credentials are installed, use the command:
 
 The client log also outputs information about what credentials are loaded.
 
-# Understanding and using the Client #
+# Understandng and using the Client #
 
 The client also generates the usual Unity log file. The client operates in three modes depending on what you are doing for a server.
 
@@ -301,7 +320,7 @@ Local mode uses a server running on the local machine, and then the client will 
 
 ### How to use in GAMELIFT mode ###
 
-1. To use the GameLift server in GameLift mode, simply run the clients with `C:\dev\GameLiftUnity\Build\rc.bat` without a local server running, and the game will try to connect. Clients can be on different machines and play together. NOTE, the corporate network (or VPN connection to the corporate network) can disrupt the client’s ability to reach the GameLift fleet, due to blocked ports. Port permissions must be set on the fleet to allow access on port 1935. (NB Outbound traffic on this port might be blocked by the Amazon corporate network in some places now, other ports can be specified to the server with -port 1935 or other values if needed; See the section for setting up your own GameLift server below.)
+1. To use the GameLift server in GameLift mode, simply run the clients with `C:\dev\GameLiftUnity\Build\rc.bat` without a local server running, and the game will try to connect. Clients can be on different machines and play together. NOTE, the corporate network (or VPN connection to the corporate network) can disrupt the client’s ability to reach the GameLift fleet, due to blocked ports. Port permissions must be set on the fleet to allow access on port 1935. (NB Outbound traffic on this port might be blocked by the Amazon corporate network in some places now, other ports can be specified to the server with -port 1935 or other values if needed; See the sectioni for setting up your own GameLift server below.)
 
 To specify an alias to connect to, run the client with the alias as a parameter. The syntax is:
 
@@ -376,10 +395,6 @@ In disconnected mode you don't need a server of any kind.
 ```
 
 To do: figure out how to allow the client to connect to a GameLift Local run server.
-
-# Shameless plug #
-
-Being published in the next week or two on AWS Labs, our other GitHub for experimental tools and features, please find my GameLiftRemotePlus tool, a Windows WPF application that makes RDP or SSH into your fleet instances a complete doddle. It's up there and I will add a link when it goes up (if I remember).
 
 # Other commands in the build folder #
 
