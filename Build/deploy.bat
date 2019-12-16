@@ -32,7 +32,7 @@ IF NOT EXIST %ABS_ROOT%\Output\Server\Image\GameLiftUnity.exe GOTO NOBUILD
 
 REM ------- DEPLOY BUILD, CREATE FLEET AND CREATE ALIAS DIRECTED TO IT (NEW COMBINED C# SCRIPT) -------
 ECHO PLEASE WAIT. DEPLOYMENT PROCESS TAKES A FEW MINUTES.
-CALL %ABS_ROOT%\DeployTool\bin\Release\DeployTool.exe --name %DEPLOYNAME% --version %1 --root-path %ABS_ROOT%\Output\Server\Image
+CALL %ABS_ROOT%\DeployTool\bin\Release\DeployTool.exe --name %DEPLOYNAME% --version %1 --root-path %ABS_ROOT%\Output\Server\Image --alias
 GOTO END
 
 :NOBUILD
