@@ -22,9 +22,14 @@ SET ABS_ROOT=%CD%
 POPD
 
 REM ------- RUN STANDALONG CLIENT PLAYER -------
-ECHO LOGGING TO %UserProfile%\AppData\LocalLow\DefaultCompany\GameLiftUnity\output_log.txt
+ECHO LOGGING TO %UserProfile%\AppData\LocalLow\DefaultCompany\GameLiftUnity\Player.log
 
 ::Modify start command to always use your custom alias as follows:
 ::START %ABS_ROOT%\Output\Client\Image\GameLiftUnity.exe --alias alias-6822cfcc-d773-40dc-9a04-5bb1e07d5c6b
 
-START %ABS_ROOT%\Output\Client\Image\GameLiftUnity.exe %*
+:: Default log file output varies depending on the Unity Version. Force the output to the same place for all.
+:: C:\Users\username\AppData\LocalLow\CompanyName\ProductName\output_log.txt (standalone: 2018.3 and older)
+:: %LOCALAPPDATA%\Unity\Editor\Editor.log (editor)
+:: C:\Users\username\AppData\LocalLow\CompanyName\ProductName\Player.log (standalone: 2018.4 and newer)
+START %ABS_ROOT%\Output\Client\Image\GameLiftUnity.exe -logFile %UserProfile%\AppData\LocalLow\DefaultCompany\GameLiftUnity\Player.log %*
+
