@@ -23,15 +23,34 @@ public class Credentials
 {
     public static readonly string profileName = "demo-gamelift-unity";
 
+    public static void MigrateProfile()
+    {
+        // Credential profile used to be stored in .net sdk credentials store.
+        // Shared credentials file is more modern. Migrate old profile if needed.
+        // Shows good form for profile management
+        CredentialProfile profile;
+        var scf = new SharedCredentialsFile();
+        if (!scf.TryGetProfile(profileName, out _))
+        {
+            var nscf = new NetSDKCredentialsFile();
+            if (nscf.TryGetProfile(profileName, out profile))
+            {
+                scf.RegisterProfile(profile);
+                nscf.UnregisterProfile(profileName);
+            }
+        }
+    }
+
     public static void Install()
     {
+        MigrateProfile();
+
         // Use command line filename for credentials (*.csv file). As many as you like can be specified, only the first one found and valid will be used.
         string[] args = System.Environment.GetCommandLineArgs();
         for (int i = 0; i < args.Length - 1; i++)
         {
             if (args[i] != "--credentials")
             {
-                //Debug.Log(":( Unrecognized command line parameter: " + args[i] + " (consider --credentials <filename.csv>)" + Environment.NewLine);
                 continue;
             }
 
@@ -83,9 +102,9 @@ public class Credentials
                 AccessKey = accessKey,
                 SecretKey = secretKey
             };
-            var profile = new Amazon.Runtime.CredentialManagement.CredentialProfile(profileName, options);
-            new NetSDKCredentialsFile().RegisterProfile(profile);
-            Debug.Log(":) PROFILE REGISTERED SUCCESSFULLY." + Environment.NewLine);
+            var profile = new CredentialProfile(profileName, options);
+            new SharedCredentialsFile().RegisterProfile(profile);
+            Debug.Log(":) PROFILE REGISTERED SUCCESSFULLY IN SHARED CREDENTIALS FILE." + Environment.NewLine);
             break;
         }
     }
