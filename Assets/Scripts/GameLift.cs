@@ -360,13 +360,53 @@ public class GameLiftClient
     private string playerId; // this was once for DAU based billing.
     private Amazon.GameLift.Model.PlayerSession psession = null;
     // default alias - command line overrides, use --alias alias-0c67a845-bc6e-4885-a3f6-40f1d2268234
+    // or change the default below and rebuild the client (case sensitive command line)
+    //    buildconfig Client
     public string aliasId = "alias-0c67a845-bc6e-4885-a3f6-40f1d2268234";
+    public static readonly string profileName = "demo-gamelift-unity";
+    public AmazonGameLiftClient aglc = null;
+
+    public void CreateGameLiftClient()
+    {
+        var config = new AmazonGameLiftConfig();
+        config.RegionEndpoint = Amazon.RegionEndpoint.USEast1;
+        Debug.Log("GL372");
+        try
+        {
+            CredentialProfile profile = null;
+            var nscf = new SharedCredentialsFile();
+            nscf.TryGetProfile(profileName, out profile);
+            AWSCredentials credentials = profile.GetAWSCredentials(null);
+            Debug.Log("demo-gamelift-unity profile GL376");
+            aglc = new AmazonGameLiftClient(credentials, config);
+            Debug.Log("GL378");
+        }
+        catch (AmazonServiceException)
+        {
+            Debug.Log("regular profile search GL382");
+            try
+            {
+                aglc = new AmazonGameLiftClient(config);
+            }
+            catch (AmazonServiceException e)
+            {
+                Debug.Log("AWS Credentials not found. Cannot connect to GameLift. Start application with -credentials <file> flag where credentials are the credentials.csv or accessKeys.csv file containing the access and secret key. GL390");
+                Debug.Log(e.Message);
+            }
+        }
+    }
+
+    public void DisposeGameLiftClient()
+    {
+        aglc.Dispose();
+    }
 
     public GameLiftClient(GameLift _gl)
     {
         gl = _gl;
         playerId = Guid.NewGuid().ToString();
         Credentials.Install();
+        CreateGameLiftClient();
 
         // Use command line alias if possible, otherwise use default (hard coded alias)
         string[] args = System.Environment.GetCommandLineArgs();
@@ -374,7 +414,6 @@ public class GameLiftClient
         {
             if (args[i] != "--alias")
             {
-                //Debug.Log(":( Unrecognized command line parameter: " + args[i] + " (consider --alias <aliasId>)" + Environment.NewLine);
                 continue;
             }
 
@@ -389,31 +428,6 @@ public class GameLiftClient
         }
 
         // verify alias exists
-        var config = new AmazonGameLiftConfig();
-        config.RegionEndpoint = Amazon.RegionEndpoint.USEast1;
-        AmazonGameLiftClient aglc = null;
-        AWSCredentials credentials;
-
-        var chain = new CredentialProfileStoreChain();
-        bool profileFound = chain.TryGetAWSCredentials("demo-gamelift-unity", out credentials);
-        if (profileFound)
-        {
-            Debug.Log("demo-gamelift-unity profile");
-            aglc = new AmazonGameLiftClient(credentials, config);
-        }
-        else
-        {
-            Debug.Log("regular profile search");
-            try
-            {
-                aglc = new AmazonGameLiftClient(config);
-            }
-            catch (AmazonServiceException e)
-            {
-                Debug.Log(e.Message);
-                Debug.Log("AWS Credentials not found. Cannot connect to GameLift. Start application with -credentials <file> flag where credentials are the credentials.csv file containing the access and secret key.");
-            }
-        }
         if (aglc != null)
         {
             try
@@ -431,18 +445,19 @@ public class GameLiftClient
                 Debug.Log("AWS Credentials found but probably invalid. Check IAM permissions for the credentials.");
                 Debug.Log(e.Message);
             }
-            finally
-            {
-                aglc.Dispose();
-            }
         }
+    }
+
+    ~GameLiftClient()
+    {
+        DisposeGameLiftClient();
     }
 
     public void Start()
     {
     }
 
-    public Amazon.GameLift.Model.PlayerSession CreatePlayerSession(AmazonGameLiftClient aglc, Amazon.GameLift.Model.GameSession gsession)
+    public Amazon.GameLift.Model.PlayerSession CreatePlayerSession(Amazon.GameLift.Model.GameSession gsession)
     {
         try
         {
@@ -461,7 +476,7 @@ public class GameLiftClient
         }
     }
 
-    public Amazon.GameLift.Model.GameSession CreateGameSession(AmazonGameLiftClient aglc)
+    public Amazon.GameLift.Model.GameSession CreateGameSession()
     {
         try
         {
@@ -486,7 +501,7 @@ public class GameLiftClient
         }
     }
 
-    public Amazon.GameLift.Model.GameSession SearchGameSessions(AmazonGameLiftClient aglc)
+    public Amazon.GameLift.Model.GameSession SearchGameSessions()
     {
         try
         {
@@ -513,31 +528,6 @@ public class GameLiftClient
     public void GetConnectionInfo(ref string ip, ref int port, ref string auth)
     {
         Debug.Log("GetConnectionInfo()");
-        var config = new AmazonGameLiftConfig();
-        config.RegionEndpoint = Amazon.RegionEndpoint.USEast1;
-        AmazonGameLiftClient aglc = null;
-        AWSCredentials credentials;
-        var chain = new CredentialProfileStoreChain();
-        bool profileFound = chain.TryGetAWSCredentials("demo-gamelift-unity", out credentials);
-        if (profileFound)
-        {
-            Debug.Log("demo-gamelift-unity profile");
-            aglc = new AmazonGameLiftClient(credentials, config);
-        }
-        else
-        {
-            Debug.Log("regular profile search");
-            try
-            {
-                aglc = new AmazonGameLiftClient(config);
-            }
-            catch (AmazonServiceException e)
-            {
-                // search failed
-                Debug.Log(e.Message);
-                Debug.Log("AWS Credentials not found. Cannot connect to GameLift. Start application with -credentials <file> flag where credentials are the credentials.csv file containing the access and secret key.");
-            }
-        }
         if (aglc != null)
         {
             try
@@ -545,18 +535,18 @@ public class GameLiftClient
                 for (int retry = 0; retry < 4; retry++)
                 {
                     Debug.Log("SearchGameSessions retry==" + retry);
-                    Amazon.GameLift.Model.GameSession gsession = SearchGameSessions(aglc);
+                    Amazon.GameLift.Model.GameSession gsession = SearchGameSessions();
                     if (gsession != null)
                     {
                         Debug.Log("GameSession found " + gsession.GameSessionId);
-                        Amazon.GameLift.Model.PlayerSession psession = CreatePlayerSession(aglc, gsession);
+                        Amazon.GameLift.Model.PlayerSession psession = CreatePlayerSession(gsession);
                         if (psession != null)
                         {
                             // created a player session in there
                             ip = psession.IpAddress;
                             port = psession.Port;
                             auth = psession.PlayerSessionId;
-                            Debug.Log("CLIENT CONNECT INFO: " + ip + ", " + port + ", " + auth);
+                            Debug.Log($"CLIENT CONNECT INFO: {ip}, {port}, {auth} GL545");
                             if (gl.gamelogic != null) gl.gamelogic.GameliftStatus = true;
                             aglc.Dispose();
                             return;
@@ -571,22 +561,21 @@ public class GameLiftClient
                 for (int retry = 0; retry < 4; retry++)
                 {
                     Debug.Log("GameSession not found. CreateGameSession: retry==" + retry);
-                    Amazon.GameLift.Model.GameSession gsession = CreateGameSession(aglc);
+                    Amazon.GameLift.Model.GameSession gsession = CreateGameSession();
                     if (gsession != null)
                     {
                         for (int psretry = 0; psretry < 4; psretry++)
                         {
                             Debug.Log("CreatePlayerSession: retry==" + psretry);
-                            psession = CreatePlayerSession(aglc, gsession);
+                            psession = CreatePlayerSession(gsession);
                             if (psession != null)
                             {
                                 // created a player session in there
                                 ip = psession.IpAddress;
                                 port = psession.Port;
                                 auth = psession.PlayerSessionId;
-                                Debug.Log("CLIENT CONNECT INFO: " + ip + ", " + port + ", " + auth);
+                                Debug.Log($"CLIENT CONNECT INFO: {ip}, {port}, {auth} GL574");
                                 if (gl.gamelogic != null) gl.gamelogic.GameliftStatus = true;
-                                aglc.Dispose();
                                 return;
                             }
                         }
@@ -598,17 +587,13 @@ public class GameLiftClient
             }
             catch (Exception e)
             {
-                Debug.Log("AWS Credentials found but probably invalid. Check IAM permissions for the credentials.");
+                Debug.Log("AWS Credentials found but probably invalid. Check IAM permissions for the credentials. GL588");
                 Debug.Log(e.Message);
-            }
-            finally
-            {
-                aglc.Dispose();
             }
         }
 
         // something's not working. fall back to local client
-        Debug.Log("CLIENT CONNECT INFO (LOCAL): " + ip + ", " + port + ", " + auth);
+        Debug.Log($"CLIENT CONNECT INFO (LOCAL): {ip}, {port}, {auth} GL594");
         if (gl.gamelogic != null) gl.gamelogic.GameliftStatus = false;
     }
 }
