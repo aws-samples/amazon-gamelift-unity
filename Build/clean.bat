@@ -47,7 +47,12 @@ IF EXIST "%ABS_ROOT%\obj" RMDIR /S /Q "%ABS_ROOT%\obj"
 IF EXIST "%ABS_ROOT%\Logs" RMDIR /S /Q "%ABS_ROOT%\Logs"
 IF EXIST "%ABS_ROOT%\ProjectSettings" RMDIR /S /Q "%ABS_ROOT%\ProjectSettings"
 IF EXIST "%ABS_ROOT%\Temp" RMDIR /S /Q "%ABS_ROOT%\Temp"
+IF EXIST "%ABS_ROOT%\SDK" RMDIR /S /Q "%ABS_ROOT%\SDK"
 IF EXIST "%ABS_ROOT%\.VS" RMDIR /S /Q "%ABS_ROOT%\.VS"
+
+REM CLEAN FIXSDK
+IF EXIST "%ABS_ROOT%\Build\FixSdk\obj" RMDIR /S /Q "%ABS_ROOT%\Build\FixSdk\obj"
+IF EXIST "%ABS_ROOT%\Build\FixSdk\bin" RMDIR /S /Q "%ABS_ROOT%\Build\FixSdk\bin"
 
 REM CLEAN DEPLOYTOOL
 IF EXIST "%ABS_ROOT%\DeployTool\packages" RMDIR /S /Q "%ABS_ROOT%\DeployTool\packages"
@@ -58,13 +63,6 @@ IF EXIST "%ABS_ROOT%\DeployTool\Properties" RMDIR /S /Q "%ABS_ROOT%\DeployTool\P
 DEL /Q %ABS_ROOT%\DeployTool\DeployTool.csproj.user 2> NUL
 ATTRIB -H %ABS_ROOT%\DeployTool\*.suo > NUL
 DEL /Q %ABS_ROOT%\DeployTool\*.suo 2> NUL
-
-REM TIDY UP SDK OUTPUTS
-IF EXIST "%ABS_ROOT%\SDK\GameLift-CSharp-ServerSDK-3.2.1\packages" RMDIR /S /Q "%ABS_ROOT%\SDK\GameLift-CSharp-ServerSDK-3.2.1\packages"
-IF EXIST "%ABS_ROOT%\SDK\GameLift-CSharp-ServerSDK-3.2.1\Net35\bin" RMDIR /S /Q "%ABS_ROOT%\SDK\GameLift-CSharp-ServerSDK-3.2.1\Net35\bin"
-IF EXIST "%ABS_ROOT%\SDK\GameLift-CSharp-ServerSDK-3.2.1\Net35\obj" RMDIR /S /Q "%ABS_ROOT%\SDK\GameLift-CSharp-ServerSDK-3.2.1\Net35\obj"
-
-IF /I "%1" == "SDK" DEL /S /Q "%ABS_ROOT%\Assets\Plugins\*.dll" >nul 2>&1
 
 REM SDF EXTENSION FILES
 DEL /S /Q %ABS_ROOT%\*.sdf 2> NUL
