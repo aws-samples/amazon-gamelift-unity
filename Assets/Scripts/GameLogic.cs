@@ -44,7 +44,7 @@ public class GameLogic : MonoBehaviour
         // prevent the game going to sleep when the window loses focus
         Application.runInBackground = true;
         // Just 60 frames per second is enough
-        Application.targetFrameRate = 60;
+        Application.targetFrameRate = 75;
 
         // Get pointers to scripts on other objects
         GameObject gameliftObj = GameObject.Find("/GameLiftStatic");
@@ -108,7 +108,7 @@ public class GameLogic : MonoBehaviour
 
     private void Attract()
     {
-        if (!Playing && Authoritative && Frame % 60 == 0)
+        if (!Playing && Authoritative && Frame % 75 == 0)
         {
             simulation.ResetBoard(); // randomize the board
 #if SERVER
@@ -187,8 +187,8 @@ public class GameLogic : MonoBehaviour
         simulation.ResetBoard();
         simulation.ResetScores();
         simulation.playing = true;
-        log.WriteLine("GO");
-        render.SetMessage("GO");
+        log.WriteLine("START");
+        render.SetMessage("START");
         FlashMessage(4, 4);
 #if SERVER
         server.TransmitState();
@@ -556,7 +556,7 @@ public class Simulation
             playerIdx = 0;
             for (int bcNum = 0; bcNum < boardColors.Length; bcNum++)
             {
-                boardColors[bcNum] = UnityEngine.Random.Range(0, 7);
+                boardColors[bcNum] = UnityEngine.Random.Range(0, 8);
             }
         }
     }

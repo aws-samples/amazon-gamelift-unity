@@ -12,16 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Amazon;
+
 using System.IO;
 using UnityEngine;
 using System.Text.RegularExpressions;
 using System;
-using Amazon.Runtime.CredentialManagement;
+
 
 public class Credentials
 {
     public static readonly string profileName = "demo-gamelift-unity";
+    public class CredentialProfile { }
+    public class SharedCredentialsFile { }
+    public class NetSDKCredentialsFile { }
+    
 
     public static void MigrateProfile()
     {
