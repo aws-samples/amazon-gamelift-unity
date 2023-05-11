@@ -12,11 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Amazon;
-using Amazon.GameLift;
-using Amazon.Runtime;
-using Amazon.Runtime.CredentialManagement;
-using Aws.GameLift.Server;
 using System;
 using System.Collections.Generic;
 using System.Net;
